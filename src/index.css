@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Share+Tech+Mono&family=MedievalSharp&family=Rajdhani:wght@400;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Dark realm base */
+  --void:          #05030f;
+  --deep:          #080516;
+  --surface:       #0c0820;
+  --panel:         #100d28;
+  --card:          #14102f;
+  --elevated:      #1c1840;
+
+  /* Fantasy neon primaries */
+  --arcane:        #b44fff;
+  --dragon:        #ff4400;
+  --enchant:       #00ffcc;
+  --gold:          #ffc200;
+  --rune:          #4488ff;
+  --poison:        #44ff88;
+
+  /* Neon cyberpunk accents */
+  --neon-cyan:     #00fff7;
+  --neon-magenta:  #ff00ff;
+  --neon-violet:   #7b2fff;
+
+  /* Player faction colors */
+  --faction-red:    #ff2244;
+  --faction-blue:    #2288ff;
+  --faction-green:   #00ee77;
+  --faction-yellow:  #ffcc00;
+
+  /* Text */
+  --text-parchment: #e8d9b0;
+  --text-dim:       #6655aa;
+  --text-rune:      #b44fff;
+  --text-bright:    #ffffff;
+}
+
+@theme {
+  --font-sans: "Rajdhani", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cinzel Decorative", serif;
+  --font-cinzel: "Cinzel", serif;
+  --font-mono: "Share Tech Mono", monospace;
+  --font-medieval: "MedievalSharp", cursive;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--void)] text-[var(--text-parchment)] selection:bg-[var(--arcane)]/30 font-sans overflow-x-hidden;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at 50% 30%, #1a0a35 0%, #0a0520 45%, #05030f 100%);
+  }
+}
+
+/* Layer 2: Runic hex grid */
+.hex-grid {
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='70'><polygon points='40,2 78,21 78,59 40,68 2,59 2,21' fill='none' stroke='rgba(180,79,255,0.05)' stroke-width='1'/><text x='40' y='38' font-size='8' fill='rgba(180,79,255,0.08)' text-anchor='middle'>ᚱ</text></svg>");
+  background-size: 80px 70px;
+  animation: runeGrid 25s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes runeGrid {
+  0%   { transform: translate(0,0) rotate(0deg); }
+  100% { transform: translate(80px,70px) rotate(0.5deg); }
+}
+
+/* Static Scanlines Texture */
+.scanlines-texture {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0px, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px);
+  pointer-events: none;
+  z-index: 99;
+}
+
+/* Layer 3: Scan Line Sweep */
+.scan-line {
+  position: fixed;
+  left: 0; 
+  right: 0;
+  background: linear-gradient(to bottom, transparent 0%, rgba(180,79,255,0.015) 50%, transparent 100%);
+  height: 200px;
+  animation: scanSweep 8s linear infinite;
+  pointer-events: none;
+  z-index: 100;
+}
+
+@keyframes scanSweep {
+  0%   { top: -200px; }
+  100% { top: 100vh; }
+}
+
+/* Layer 4: Vignette & Depth */
+.vignette {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(5,3,15,0.8) 100%);
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* UI SHAPES */
+.shape-hex {
+  clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0% 50%);
+}
+
+.shape-corner {
+  clip-path: polygon(24px 0%, calc(100% - 24px) 0%, 100% 24px, 100% calc(100% - 24px), calc(100% - 24px) 100%, 24px 100%, 0% calc(100% - 24px), 0% 24px);
+}
+
+.shape-cut {
+  clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 16px, 100% 100%, 0% 100%);
+}
+
+.shape-octagon {
+  clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px);
+}
+
+/* TITLE ANIMATIONS */
+@keyframes titleGlow {
+  from { filter: drop-shadow(0 0 15px rgba(180,79,255,0.5)) drop-shadow(0 0 30px rgba(255,194,0,0.2)); }
+  to { filter: drop-shadow(0 0 25px rgba(0,255,247,0.6)) drop-shadow(0 0 50px rgba(180,79,255,0.4)); }
+}
+
+.title-glow {
+  animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes crownFloat {
+  0%,100% { transform: translateY(0) rotate(-4deg); }
+  50%      { transform: translateY(-8px) rotate(4deg); }
+}
+
+.crown-float {
+  animation: crownFloat 2.5s ease-in-out infinite;
+}
+
+@keyframes questBtnShimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.btn-shimmer {
+  background-size: 300% 100%;
+  animation: questBtnShimmer 4s linear infinite;
+}
+
+@keyframes swordShine {
+  0%, 100% { left: -50%; }
+  50%       { left: 150%; }
+}
+
+.sword-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,194,0,0.12), transparent);
+  animation: swordShine 3s ease-in-out infinite;
+}
+
+@keyframes glitchRune {
+  0%,88%,100% { text-shadow: 0 0 20px currentColor; transform: none; clip-path: none; }
+  90% { text-shadow: -3px 0 #ff00ff, 3px 0 #00fff7; transform: translateX(-2px); }
+  93% { text-shadow: 3px 0 #ff00ff, -3px 0 #00fff7; transform: translateX(2px) skewX(3deg); }
+  96% { text-shadow: 0 0 20px currentColor; transform: none; }
+}
+
+.glitch-rune {
+  animation: glitchRune 4s infinite;
+}
+
+@keyframes enchantRoll {
+  0%   { transform: rotate(0deg) scale(1); filter: brightness(1); }
+  20%  { transform: rotate(-15deg) scale(1.15); filter: brightness(1.5); }
+  50%  { transform: rotate(10deg) scale(0.9); filter: brightness(0.8); }
+  80%  { transform: rotate(-5deg) scale(1.05); filter: brightness(1.3); }
+  100% { transform: rotate(0deg) scale(1); filter: brightness(1); }
+}
+
+@keyframes diceRoll {
+  0%   { transform: rotate(0deg)   scale(1);    }
+  25%  { transform: rotate(20deg)  scale(1.15); }
+  75%  { transform: rotate(-10deg) scale(0.9);  }
+  100% { transform: rotate(0deg)   scale(1);    }
+}
+.rolling {
+  animation: diceRoll 0.55s ease both;
+}
+
+/* SECTION LABELS */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.section-label::before, .section-label::after {
+  content: '✦';
+  color: var(--arcane);
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+@keyframes rowPulse {
+  from { background: linear-gradient(90deg, rgba(var(--f-color), 0.06), transparent); }
+  to { background: linear-gradient(90deg, rgba(var(--f-color), 0.12), transparent); }
+}
+
+.active-row-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), transparent);
+  animation: rowPulse 2s ease infinite alternate;
+  pointer-events: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--arcane);
+  border-radius: 10px;
+  opacity: 0.3;
+}
